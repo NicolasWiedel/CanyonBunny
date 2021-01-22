@@ -7,7 +7,9 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 import de.javadevblog.canyonbunny.util.CameraHelper;
 
 public class WorldController extends InputAdapter {
@@ -32,15 +34,14 @@ public class WorldController extends InputAdapter {
     private void initTestObjects(){
         // array mit 5 sprites
         testSprites = new Sprite[5];
-        // kreiert leeres POT-sized Pixmap mit 8 bit RGBA pixel data
-        int width = 32;
-        int height = 32;
-        Pixmap pixmap = createProceduralPixmap(width, height);
-        // kreiert neue Texture mit pixmap data
-        Texture texture = new Texture(pixmap);
+        // kreiert eienListe von TextureRegions
+        Array<TextureRegion> regions = new Array<>();
+        regions.add(Assets.INSTANCE.bunny.head);
+        regions.add(Assets.INSTANCE.feather.feather);
+        regions.add(Assets.INSTANCE.goldCoin.goldCoin);
         // kreiert ein neues sprite mit der erstellten Texture
         for (int i = 0; i < testSprites.length; i++) {
-            Sprite spr = new Sprite(texture);
+            Sprite spr = new Sprite(regions.random());
             // sprite size 1m x 1m in game world
             spr.setSize(1, 1);
             // Sezt origin to sprite's center
@@ -56,7 +57,7 @@ public class WorldController extends InputAdapter {
         selectedSprite = 0;
     }
 
-    private Pixmap createProceduralPixmap (int width, int height) {
+    /*private Pixmap createProceduralPixmap (int width, int height) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         // füllt das Quadrat mit Farbe 50% opacity
         pixmap.setColor(1, 0, 0, 0.5f);
@@ -69,7 +70,7 @@ public class WorldController extends InputAdapter {
         pixmap.setColor(0, 1, 1, 1);
         pixmap.drawRectangle(0, 0, width, height);
         return pixmap;
-    }
+    }*/
 
     public void update(float deltaTime){
         handleDebugIput(deltaTime);
