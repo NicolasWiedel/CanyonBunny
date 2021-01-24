@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Disposable;
@@ -23,6 +24,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public AssetGoldCoin goldCoin;
     public AssetFeather feather;
     public AssetLevelDecoration levelDecoration;
+    public AssetFonts fonts;
 
     // Singleton Konstruktor
     private Assets(){}
@@ -50,6 +52,7 @@ public class Assets implements Disposable, AssetErrorListener {
         }
 
         // Game Rescourcen erstellen
+        fonts = new AssetFonts();
         bunny = new AssetBunny(atlas);
         rock = new AssetRock(atlas);
         goldCoin = new AssetGoldCoin(atlas);
@@ -60,12 +63,17 @@ public class Assets implements Disposable, AssetErrorListener {
     @Override
     public void dispose() {
         assetManager.dispose();
+        fonts.defaultSmall.dispose();
+        fonts.defaultNormal.dispose();
+        fonts.defaultBig.dispose();
     }
 
     @Override
     public void error(AssetDescriptor asset, Throwable throwable) {
         Gdx.app.error(TAG, "Could not load asset: " + asset.fileName, (Exception) throwable);
     }
+
+    // innere Klassen
 
     public class AssetBunny {
 
@@ -121,6 +129,35 @@ public class Assets implements Disposable, AssetErrorListener {
             mountainLeft = atlas.findRegion("mountain_left");
             mountainRight = atlas.findRegion("mountain_right");
             waterOverlay = atlas.findRegion("water_overlay");
+        }
+    }
+
+    public class AssetFonts {
+
+        public final BitmapFont defaultSmall;
+        public final BitmapFont defaultNormal;
+        public final BitmapFont defaultBig;
+
+        public AssetFonts(){
+            // drei verschieden Fonts kreieren
+            defaultSmall = new BitmapFont(Gdx.files.internal(
+                    "images/arial-15.fnt"), true);
+            defaultNormal = new BitmapFont(Gdx.files.internal(
+                    "images/arial-15.fnt"), true);
+            defaultBig = new BitmapFont(Gdx.files.internal(
+                    "images/arial-15.fnt"), true);
+            //Größe setzen
+            defaultSmall.getData().setScale(0.75f);
+            defaultNormal.getData().setScale(1.0f);
+            defaultBig.getData().setScale(2.0f);
+            // linear texture filtering für weichere Darstellung
+            defaultSmall.getRegion().getTexture().setFilter(
+                    Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            defaultNormal.getRegion().getTexture().setFilter(
+                    Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            defaultBig.getRegion().getTexture().setFilter(
+                    Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
         }
     }
 }
