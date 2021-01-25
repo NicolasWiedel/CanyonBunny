@@ -136,6 +136,20 @@ public class Level {
         clouds.render(batch);
     }
 
+    public void update(float deltaTime){
+        bunnyHead.update(deltaTime);
+        for (Rock rock : rocks){
+            rock.update(deltaTime);
+        }
+        for (GoldCoin goldCoin : goldCoins){
+            goldCoin.update(deltaTime);
+        }
+        for (Feather feather : feathers){
+            feather.update(deltaTime);
+        }
+        clouds.update(deltaTime);
+    }
+
     public enum BLOCK_TYPE {
         EMPTY(0, 0, 0), // black
         ROCK(0, 255, 0), // green
