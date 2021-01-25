@@ -12,6 +12,9 @@ public class Level {
 
     // Objekte
     public Array<Rock> rocks;
+    public BunnyHead bunnyHead;
+    public Array<GoldCoin> goldCoins;
+    public Array<Feather> feathers;
 
     // Deko
     public Clouds clouds;
@@ -23,8 +26,12 @@ public class Level {
     }
 
     private void init(String fileName) {
+        // Player
+        bunnyHead = null;
         // objects
         rocks = new Array<Rock>();
+        goldCoins = new Array<GoldCoin>();
+        feathers = new Array<Feather>();
 
         // Laden der Level Datei
         Pixmap pixmap = new Pixmap(Gdx.files.internal(fileName));
@@ -57,15 +64,24 @@ public class Level {
                 }
                 // Player
                 else if (BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel)){
-                    //TODO
+                    obj = new BunnyHead();
+                    offsetHeight = -3.0f;
+                    obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
+                    bunnyHead = (BunnyHead) obj;
                 }
                 // Feder
                 else if (BLOCK_TYPE.ITEM_FEATHER.sameColor(currentPixel)){
-                    //TODO
+                    obj = new Feather();
+                    offsetHeight = -1.5f;
+                    obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
+                    feathers.add((Feather) obj);
                 }
                 // Münze
                 else if (BLOCK_TYPE.ITEM_GOLD_COIN.sameColor(currentPixel)){
-                    // TODO
+                    obj = new GoldCoin();
+                    offsetHeight = -1.5f;
+                    obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
+                    goldCoins.add((GoldCoin) obj);
                 }
                 else {
                     int r = 0xff & (currentPixel >>> 24); //red color channel
@@ -97,8 +113,22 @@ public class Level {
         mountains.render(batch);
 
         // Rocks zeichnen
-        for (Rock rock : rocks)
+        for (Rock rock : rocks) {
             rock.render(batch);
+        }
+
+        // Münzen zeichnen
+        for (GoldCoin goldCoin : goldCoins){
+            goldCoin.render(batch);
+        }
+
+        // Federn zeichnen
+        for (Feather feather : feathers){
+            feather.render(batch);
+        }
+
+        // Spieler zeichnen
+        bunnyHead.render(batch);
 
         // Wasser zeichnen
         waterOverlay.render(batch);

@@ -22,4 +22,10 @@ public class Constants {
 
     // Menge der Extraleben beim Start eines Levels
     public static final int LIVES_START = 3;
+
+    // Dauer der Feather Powe ups
+    public static final float ITEM_FEATHER_POWERUP_DURATION = 9;
+
+    // Verzögerung nach Game Over
+    public static final float TIME_DELAY_GAME_OVER = 3;
 }
