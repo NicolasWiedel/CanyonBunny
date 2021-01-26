@@ -45,6 +45,7 @@ public class WorldController extends InputAdapter {
 
     public void update(float deltaTime){
         handleDebugIput(deltaTime);
+        handleInpuGame(deltaTime);
         level.update(deltaTime);
         testCollision();
         cameraHelper.update(deltaTime);
@@ -91,6 +92,11 @@ public class WorldController extends InputAdapter {
         if(keycode == Input.Keys.R){
             init();
             Gdx.app.debug(TAG, "Gameworld zurücgesetzt!");
+        }
+        // toggle Kamera
+        else if (keycode == Input.Keys.ENTER){
+            cameraHelper.setTarget(cameraHelper.hasTarget() ? null : level.bunnyHead);
+            Gdx.app.debug(TAG, "Camera follow enabled: " + cameraHelper.hasTarget());
         }
         return false;
     }
@@ -177,6 +183,31 @@ public class WorldController extends InputAdapter {
             }
             onCollisionBunnyWithFeather(feather);
             break;
+        }
+    }
+
+    private void handleInpuGame(float deltaTime){
+        if (cameraHelper.hasTarget(level.bunnyHead)){
+            // Spieler Bewegung
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+               level.bunnyHead.velocity.x = -level.bunnyHead.terminalVelocity.x;
+            }
+            else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+                level.bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x;
+            }
+            else {
+                // für nicht desktop
+                if (Gdx.app.getType() != Application.ApplicationType.Desktop){
+                    level.bunnyHead.velocity.x = level.bunnyHead.terminalVelocity.x;
+                }
+            }
+
+            // Bunny springt
+            if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+                level.bunnyHead.setJumping(true);
+            } else {
+                level.bunnyHead.setJumping(false);
+            }
         }
     }
 }
