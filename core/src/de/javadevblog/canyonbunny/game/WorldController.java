@@ -235,6 +235,7 @@ public class WorldController extends InputAdapter {
 
     public boolean isGameOver(){
         return lives < 0;
+
     }
 
     public boolean isPlayerInWater(){

@@ -5,8 +5,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import de.javadevblog.canyonbunny.util.Constants;
+
+import javax.swing.*;
 
 public class WorldRenderer implements Disposable {
 
@@ -72,7 +75,7 @@ public class WorldRenderer implements Disposable {
         }
     }
 
-    private void renderGuiPfsCounter(SpriteBatch batch){
+    private void renderGuiFpsCounter(SpriteBatch batch){
         float x = cameraGUI.viewportWidth - 55;
         float y = cameraGUI.viewportHeight - 15;
         int fps = Gdx.graphics.getFramesPerSecond();
@@ -95,8 +98,10 @@ public class WorldRenderer implements Disposable {
         batch.setProjectionMatrix(cameraGUI.combined);
         batch.begin();
         renderGuiScore(batch);
+        renderGuiFeatherPowerup(batch);
         renderGuiExtraLive(batch);
-        renderGuiPfsCounter(batch);
+        renderGuiFpsCounter(batch);
+        renderGuiGameOverMessage(batch);
         batch.end();
     }
 
@@ -108,6 +113,34 @@ public class WorldRenderer implements Disposable {
         cameraGUI.viewportWidth = (Constants.VIEWPORT_GUI_HEIGHT / (float) height) * (float)width;
         cameraGUI.position.set(cameraGUI.viewportWidth / 2, cameraGUI.viewportHeight / 2, 0);
         cameraGUI.update();
+    }
+
+    private void renderGuiGameOverMessage(SpriteBatch batch){
+        float x = cameraGUI.viewportWidth / 2;
+        float y = cameraGUI.viewportHeight / 2;
+        if (worldController.isGameOver()) {
+            BitmapFont fontGameOver = Assets.INSTANCE.fonts.defaultBig;
+            fontGameOver.setColor(1, 0.75f, 0.25f, 1);
+            fontGameOver.draw(batch, "Game Over", x, y, 0, Align.center, false);
+            fontGameOver.setColor(1, 1, 1, 1);
+        }
+    }
+
+    private  void renderGuiFeatherPowerup(SpriteBatch batch){
+        float x = -15;
+        float y = 30;
+        float timeLeftFeatherPowerup = worldController.level.bunnyHead.timeLeftFeatherPowerup;
+        if (timeLeftFeatherPowerup > 0) {
+            // blinkendes Icon bei weniger als 5 Ssekunden Powerup Zeit
+            if (timeLeftFeatherPowerup < 4) {
+                if (((int)(timeLeftFeatherPowerup * 5) % 2) != 0) {
+                    batch.setColor(1, 1, 1, 0.5f);
+                }
+            }
+            batch.draw(Assets.INSTANCE.feather.feather, x, y, 50, 50, 100, 100, 0.35f, -0.35f, 0);
+            batch.setColor(1, 1, 1, 1);
+            Assets.INSTANCE.fonts.defaultSmall.draw(batch, "" + (int)timeLeftFeatherPowerup, x + 60, y + 57);
+        }
     }
 
     @Override
