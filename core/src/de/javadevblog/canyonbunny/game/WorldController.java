@@ -15,6 +15,8 @@ import de.javadevblog.canyonbunny.util.Constants;
 public class WorldController extends InputAdapter {
 
     private static final String TAG = WorldController.class.getName();
+    // Verzögerung nach Game4 Over
+    public static final float TIME_DELAY_GAME_OVER = 3;
 
     public CameraHelper cameraHelper;
 
@@ -25,6 +27,8 @@ public class WorldController extends InputAdapter {
     // Bounding Boxen zur Kollisionserkennung
     private Rectangle r1 = new Rectangle();
     private Rectangle r2 = new Rectangle();
+
+    private float timeLeftGameOverDelay;
 
     public WorldController(){
         init();
@@ -40,15 +44,33 @@ public class WorldController extends InputAdapter {
         Gdx.input.setInputProcessor(this);
         cameraHelper = new CameraHelper();
         lives = Constants.LIVES_START;
+        timeLeftGameOverDelay = 0;
         initiLevel();
     }
 
     public void update(float deltaTime){
         handleDebugIput(deltaTime);
-        handleInpuGame(deltaTime);
+        if(isGameOver()){
+            timeLeftGameOverDelay -= deltaTime;
+            if (timeLeftGameOverDelay < 0){
+                init();
+            }
+        }
+        else {
+            handleInpuGame(deltaTime);
+        }
+
         level.update(deltaTime);
         testCollision();
         cameraHelper.update(deltaTime);
+        if(!isGameOver() && isPlayerInWater()){
+            lives--;
+            if(isGameOver()){
+                timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
+            } else {
+                initiLevel();
+            }
+        }
     }
 
     private void handleDebugIput(float deltaTime){
@@ -209,5 +231,13 @@ public class WorldController extends InputAdapter {
                 level.bunnyHead.setJumping(false);
             }
         }
+    }
+
+    public boolean isGameOver(){
+        return lives < 0;
+    }
+
+    public boolean isPlayerInWater(){
+        return level.bunnyHead.position.y < -5;
     }
 }

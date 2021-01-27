@@ -28,6 +28,9 @@ public class CameraHelper {
 
         position.x = target.position.x + target.origin.x;
         position.y = target.position.y + target.origin.y;
+
+        // Kamera stoppen, wenn sie zu tief fällt
+        position.y = Math.max(-1f, position.y);
     }
 
     public void setPosition(float x, float y) {
