@@ -28,4 +28,13 @@ public class Constants {
 
     // Verzögerung nach Game Over
     public static final float TIME_DELAY_GAME_OVER = 3;
+
+    // Ort und Name der Atlas - Datei für die Assets der UI
+    public static final String TEXTURE_ATLAS_UI = "images/canyonbunny-ui.atlas";
+    public static final String SKIN_CANYONBUNNY_UI = "images/canyonbunny-ui.json";
+
+    // LibGDX UI
+    public static final String TAXTURE_ATLAS_LIBGDX_UI = "images/uiskin.atlas";
+    public static final String SKIN_LIBGDX_UI = "images/uiskin.json";
+
 }

@@ -21,6 +21,8 @@ public class DesktopLauncher {
 			settings.debug = drawDebugOutline;
 			TexturePacker.process(settings, "assets-raw/images",
 					"images", "canyonbunny");
+			TexturePacker.process(settings, "assets-raw/images-ui",
+					"images", "canyonbunny-ui");
 		}
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
