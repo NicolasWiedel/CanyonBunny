@@ -11,11 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import de.javadevblog.canyonbunny.util.CharacterSkin;
 import de.javadevblog.canyonbunny.util.Constants;
+import de.javadevblog.canyonbunny.util.GamePreferences;
 
 public class MenuScreen extends AbstractGameScreen {
 
     private Stage stage;
     private Skin skinCanyonBunny;
+    private Skin skinLibgdx;
 
     //Menu
     private Image imgBackground;
@@ -32,7 +34,7 @@ public class MenuScreen extends AbstractGameScreen {
     private TextButton btnWinOptCancel;
     private CheckBox chkSound;
     private Slider sldSound;
-    private CheckBox chkMusik;
+    private CheckBox chkMusic;
     private Slider sldMusic;
     private SelectBox<CharacterSkin> selCharSkin;
     private Image imgCharSkin;
@@ -105,7 +107,7 @@ public class MenuScreen extends AbstractGameScreen {
         // + Bunny
         imgBunny = new Image(skinCanyonBunny, "bunny");
         layer.add(imgBunny);
-        imgBunny.setPosition(355, 40);
+        imgBunny.setPosition(455, 40);
         return layer;
     }
 
@@ -115,7 +117,7 @@ public class MenuScreen extends AbstractGameScreen {
         // + Logo
         imgLogo = new Image(skinCanyonBunny, "logo");
         layer.add(imgLogo);
-        layer.row().expand();
+        layer.row().expandY();
         // + Info Logos
         imginfo = new Image(skinCanyonBunny, "info");
         layer.add(imginfo).bottom();
@@ -164,6 +166,45 @@ public class MenuScreen extends AbstractGameScreen {
     private Table buildOptionsWindowLayer(){
         Table layer = new Table();
         return layer;
+    }
+
+    private void loadSetings(){
+        GamePreferences prefs = GamePreferences.INSTANCE;
+        prefs.load();
+        chkSound.setChecked(prefs.sound);
+        sldSound.setValue(prefs.volSound);
+        chkMusic.setChecked(prefs.music);
+        sldMusic.setValue(prefs.volMusic);
+        selCharSkin.setSelectedIndex(prefs.charSkin);
+        onCharSkinSelected(prefs.charSkin);
+        chkShowFpsCounter.setChecked(prefs.showFpsCounter);
+    }
+
+    private void saveSettings() {
+        GamePreferences prefs = GamePreferences.INSTANCE;
+        prefs.sound = chkSound.isChecked();
+        prefs.volSound = sldSound.getValue();
+        prefs.music = chkMusic.isChecked();
+        prefs.volMusic = sldMusic.getValue();
+        prefs.charSkin = selCharSkin.getSelectedIndex();
+        prefs.showFpsCounter = chkShowFpsCounter.isChecked();
+        prefs.save();
+    }
+
+    private void onCharSkinSelected(int index) {
+        CharacterSkin skin = CharacterSkin.values()[index];
+        imgCharSkin.setColor(skin.getColor());
+    }
+
+    private void onSaveClicked() {
+        saveSettings();
+        onCancelClicked();
+    }
+
+    private void onCancelClicked() {
+        btnMenuPlay.setVisible(true);
+        btnMenuOptions.setVisible(true);
+        winOptions.setVisible(false);
     }
 
     @Override
