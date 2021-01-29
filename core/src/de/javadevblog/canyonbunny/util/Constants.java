@@ -9,7 +9,7 @@ public class Constants {
     public static final float VIEWPORT_HEIGHT = 5.0f;
 
     // GUI Breite
-    public static final float VIEWPOERT_GUI_WIDTH = 800.0f;
+    public static final float VIEWPORT_GUI_WIDTH = 800.0f;
 
     // GUI Höhe
     public static final float VIEWPORT_GUI_HEIGHT = 480.0f;
@@ -36,5 +36,9 @@ public class Constants {
     // LibGDX UI
     public static final String TAXTURE_ATLAS_LIBGDX_UI = "images/uiskin.atlas";
     public static final String SKIN_LIBGDX_UI = "images/uiskin.json";
+
+    // GamePrefs Datei
+    public static final String PREFERENCES = "canyonbunny.prefs";
+
 
 }

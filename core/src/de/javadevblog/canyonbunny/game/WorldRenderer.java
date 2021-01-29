@@ -30,7 +30,7 @@ public class WorldRenderer implements Disposable {
         camera = new OrthographicCamera(Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
         camera.position.set(0,0,0);
         camera.update();
-        cameraGUI = new OrthographicCamera(Constants.VIEWPOERT_GUI_WIDTH, Constants.VIEWPORT_GUI_HEIGHT);
+        cameraGUI = new OrthographicCamera(Constants.VIEWPORT_GUI_WIDTH, Constants.VIEWPORT_GUI_HEIGHT);
         cameraGUI.position.set(0, 0,0);
         cameraGUI.setToOrtho(true);
         cameraGUI.update();
