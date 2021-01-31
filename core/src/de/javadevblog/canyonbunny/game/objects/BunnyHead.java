@@ -3,7 +3,9 @@ package de.javadevblog.canyonbunny.game.objects;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.javadevblog.canyonbunny.game.Assets;
+import de.javadevblog.canyonbunny.util.CharacterSkin;
 import de.javadevblog.canyonbunny.util.Constants;
+import de.javadevblog.canyonbunny.util.GamePreferences;
 
 public class BunnyHead extends AbstractGameObject {
 
@@ -147,6 +149,9 @@ public class BunnyHead extends AbstractGameObject {
         if(hasFeatherPowerup){
             batch.setColor(1.0f, 0.8f, 0.0f, 1.0f);
         }
+
+        // Skin Farbe wählen
+        batch.setColor(CharacterSkin.values()[GamePreferences.INSTANCE.charSkin] .getColor());
 
         // zeichnen
         reg = regHead;

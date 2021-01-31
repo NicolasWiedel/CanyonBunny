@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import de.javadevblog.canyonbunny.util.Constants;
+import de.javadevblog.canyonbunny.util.GamePreferences;
 
 import javax.swing.*;
 
@@ -101,6 +102,9 @@ public class WorldRenderer implements Disposable {
         renderGuiFeatherPowerup(batch);
         renderGuiExtraLive(batch);
         renderGuiFpsCounter(batch);
+        if(GamePreferences.INSTANCE.showFpsCounter){
+            renderGuiFpsCounter(batch);
+        }
         renderGuiGameOverMessage(batch);
         batch.end();
     }
