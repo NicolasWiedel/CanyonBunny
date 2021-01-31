@@ -70,6 +70,9 @@ public class MenuScreen extends AbstractGameScreen {
         skinCanyonBunny = new Skin(
                 Gdx.files.internal(Constants.SKIN_CANYONBUNNY_UI),
                 new TextureAtlas(Constants.TEXTURE_ATLAS_UI));
+        skinLibgdx = new Skin(
+                Gdx.files.internal(Constants.SKIN_LIBGDX_UI),
+                new TextureAtlas(Constants.TEXTURE_ATLAS_LIBGDX_UI));
 
         // Aufbau derLayer
         Table layerBackground = buildBackgroundLayer();
@@ -168,7 +171,7 @@ public class MenuScreen extends AbstractGameScreen {
         return layer;
     }
 
-    private void loadSetings(){
+    private void loadSettings(){
         GamePreferences prefs = GamePreferences.INSTANCE;
         prefs.load();
         chkSound.setChecked(prefs.sound);
@@ -223,6 +226,7 @@ public class MenuScreen extends AbstractGameScreen {
     public void hide() {
         stage.dispose();
         skinCanyonBunny.dispose();
+        skinLibgdx.dispose();
     }
 
     @Override
