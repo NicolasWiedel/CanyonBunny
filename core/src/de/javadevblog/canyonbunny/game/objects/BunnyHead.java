@@ -1,5 +1,7 @@
 package de.javadevblog.canyonbunny.game.objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import de.javadevblog.canyonbunny.game.Assets;
@@ -35,6 +37,8 @@ public class BunnyHead extends AbstractGameObject {
     public boolean hasFeatherPowerup;
     public float timeLeftFeatherPowerup;
 
+    public ParticleEffect dustParticles = new ParticleEffect();
+
     public BunnyHead(){
         init();
     }
@@ -58,6 +62,9 @@ public class BunnyHead extends AbstractGameObject {
         // Power-Ups
         hasFeatherPowerup = false;
         timeLeftFeatherPowerup = 0;
+        // Particles
+        dustParticles.load(Gdx.files.internal("particles/dust.pfx"),
+                Gdx.files.internal("particles"));
     }
 
     public void setJumping(boolean jumKeyPressed){
@@ -110,6 +117,7 @@ public class BunnyHead extends AbstractGameObject {
                 setFeatherPowerup(false);
             }
         }
+        dustParticles.update(deltaTime);
     }
 
     @Override
@@ -137,6 +145,7 @@ public class BunnyHead extends AbstractGameObject {
                 }
         }
         if (jumpState != JumpState.GROUNDED){
+            dustParticles.allowCompletion();
             super.updateMotionY(deltaTime);
         }
     }
@@ -144,6 +153,9 @@ public class BunnyHead extends AbstractGameObject {
     @Override
     public void render(SpriteBatch batch) {
         TextureRegion reg = null;
+
+        // Particles zeichnen
+        dustParticles.draw(batch);
 
         // Färbung während Powerup
         if(hasFeatherPowerup){
