@@ -49,7 +49,29 @@ public class Clouds extends AbstractGameObject{
         // zufällige add oder sub auf die Position
         pos.y += MathUtils.random(0.0f, 0.2f) * (MathUtils.randomBoolean() ? 1 : -1);
         cloud.position.set(pos);
+        // Geschwindigkeit
+        Vector2 speed= new Vector2();
+        speed.x += 0.5f;
+        // zufällige Geschwindigkeit aufaddieren
+        speed.x += MathUtils.random(0.0f, 0.75f);
+        cloud.terminalVelocity.set(speed);
+        speed.x *= -1;
+        cloud.velocity.set(speed);
         return cloud;
+    }
+
+    @Override
+    public void update (float deltaTime) {
+        for (int i = clouds.size - 1; i>= 0; i--) {
+            Cloud cloud = clouds.get(i);
+            cloud.update(deltaTime);
+            if (cloud.position.x< -10) {
+                // cloud moved outside of world.
+                // destroy and spawn new cloud at end of level.
+                clouds.removeIndex(i);
+                clouds.add(spawnCloud());
+            }
+        }
     }
 
     @Override
