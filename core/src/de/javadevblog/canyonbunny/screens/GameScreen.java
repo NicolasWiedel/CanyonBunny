@@ -2,6 +2,7 @@ package de.javadevblog.canyonbunny.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import de.javadevblog.canyonbunny.game.WorldController;
 import de.javadevblog.canyonbunny.game.WorldRenderer;
@@ -16,7 +17,7 @@ public class GameScreen extends AbstractGameScreen {
 
     private boolean paused;
 
-    public GameScreen(Game game){
+    public GameScreen(DirectedGame game){
         super(game);
     }
 
@@ -68,5 +69,10 @@ public class GameScreen extends AbstractGameScreen {
         super.resume();
         // wird nur auf Android aufgerufen
         paused = false;
+    }
+
+    @Override
+    public InputProcessor getInputProcessor () {
+        return worldController;
     }
 }

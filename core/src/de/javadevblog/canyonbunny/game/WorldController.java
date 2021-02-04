@@ -1,12 +1,16 @@
 package de.javadevblog.canyonbunny.game;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import de.javadevblog.canyonbunny.game.objects.BunnyHead;
 import de.javadevblog.canyonbunny.game.objects.Feather;
 import de.javadevblog.canyonbunny.game.objects.GoldCoin;
 import de.javadevblog.canyonbunny.game.objects.Rock;
+import de.javadevblog.canyonbunny.screens.DirectedGame;
 import de.javadevblog.canyonbunny.screens.MenuScreen;
+import de.javadevblog.canyonbunny.screens.transitions.ScreenTransition;
+import de.javadevblog.canyonbunny.screens.transitions.ScreenTransitionSlide;
 import de.javadevblog.canyonbunny.util.CameraHelper;
 import de.javadevblog.canyonbunny.util.Constants;
 
@@ -16,7 +20,7 @@ public class WorldController extends InputAdapter {
     // Verzögerung nach Game4 Over
     public static final float TIME_DELAY_GAME_OVER = 3;
 
-    private Game game;
+    private DirectedGame game;
 
     public CameraHelper cameraHelper;
 
@@ -33,7 +37,7 @@ public class WorldController extends InputAdapter {
 
     private float timeLeftGameOverDelay;
 
-    public WorldController(Game game){
+    public WorldController(DirectedGame game){
         this.game = game;
         init();
     }
@@ -45,7 +49,6 @@ public class WorldController extends InputAdapter {
     }
 
     private void init(){
-        Gdx.input.setInputProcessor(this);
         cameraHelper = new CameraHelper();
         lives = Constants.LIVES_START;
         livesVisual = lives;
@@ -260,6 +263,9 @@ public class WorldController extends InputAdapter {
     }
 
     private void backToMenu(){
-        game.setScreen(new MenuScreen(game));
+// switch to menu screen
+        ScreenTransition transition = ScreenTransitionSlide.init(0.75f,
+                ScreenTransitionSlide.DOWN, false, Interpolation.bounceOut);
+        game.setScreen(new MenuScreen(game), transition);
     }
 }
