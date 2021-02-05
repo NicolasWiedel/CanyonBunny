@@ -10,6 +10,8 @@ import de.javadevblog.canyonbunny.screens.DirectedGame;
 import de.javadevblog.canyonbunny.screens.MenuScreen;
 import de.javadevblog.canyonbunny.screens.transitions.ScreenTransition;
 import de.javadevblog.canyonbunny.screens.transitions.ScreenTransitionSlice;
+import de.javadevblog.canyonbunny.util.AudioManager;
+import de.javadevblog.canyonbunny.util.GamePreferences;
 
 public class CanyonBunnyMain extends DirectedGame {
 
@@ -21,6 +23,9 @@ public class CanyonBunnyMain extends DirectedGame {
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
         // lade Assets
         Assets.INSTANCE.init(new AssetManager());
+        // Load preferences für audio settings und starte die Musik
+        GamePreferences.INSTANCE.load();
+        AudioManager.INSTANCE.play(Assets.INSTANCE.music.song01);
         // starte den Menuscreen
         ScreenTransition transition = ScreenTransitionSlice.init(5,
                 ScreenTransitionSlice.UP_DOWN, 10,

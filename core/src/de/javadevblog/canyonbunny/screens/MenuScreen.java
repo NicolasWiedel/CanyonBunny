@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import de.javadevblog.canyonbunny.game.Assets;
 import de.javadevblog.canyonbunny.screens.transitions.ScreenTransition;
 import de.javadevblog.canyonbunny.screens.transitions.ScreenTransitionFade;
+import de.javadevblog.canyonbunny.util.AudioManager;
 import de.javadevblog.canyonbunny.util.CharacterSkin;
 import de.javadevblog.canyonbunny.util.Constants;
 import de.javadevblog.canyonbunny.util.GamePreferences;
@@ -229,12 +230,14 @@ public class MenuScreen extends AbstractGameScreen {
     private void onSaveClicked() {
         saveSettings();
         onCancelClicked();
+        AudioManager.INSTANCE.onSettingsUpdated();
     }
 
     private void onCancelClicked() {
         btnMenuPlay.setVisible(true);
         btnMenuOptions.setVisible(true);
         winOptions.setVisible(false);
+        AudioManager.INSTANCE.onSettingsUpdated();
     }
 
     private Table buildOptWinAudioSettings(){

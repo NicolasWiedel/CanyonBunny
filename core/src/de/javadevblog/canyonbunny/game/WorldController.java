@@ -11,6 +11,7 @@ import de.javadevblog.canyonbunny.screens.DirectedGame;
 import de.javadevblog.canyonbunny.screens.MenuScreen;
 import de.javadevblog.canyonbunny.screens.transitions.ScreenTransition;
 import de.javadevblog.canyonbunny.screens.transitions.ScreenTransitionSlide;
+import de.javadevblog.canyonbunny.util.AudioManager;
 import de.javadevblog.canyonbunny.util.CameraHelper;
 import de.javadevblog.canyonbunny.util.Constants;
 
@@ -72,6 +73,7 @@ public class WorldController extends InputAdapter {
         testCollision();
         cameraHelper.update(deltaTime);
         if(!isGameOver() && isPlayerInWater()){
+            AudioManager.INSTANCE.play(Assets.INSTANCE.sounds.liveLost);
             lives--;
             if(isGameOver()){
                 timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
@@ -174,12 +176,14 @@ public class WorldController extends InputAdapter {
 
     private void onCollisionBunnyWithGoldCoin(GoldCoin goldCoin){
         goldCoin.collected = true;
+        AudioManager.INSTANCE.play(Assets.INSTANCE.sounds.pickupCoin);
         score += goldCoin.getScore();
         Gdx.app.log(TAG, "GoldCoin collected!");
     }
 
     private void onCollisionBunnyWithFeather(Feather feather){
         feather.collected = true;
+        AudioManager.INSTANCE.play(Assets.INSTANCE.sounds.pickupFeather);
         score += feather.getScore();
         level.bunnyHead.setFeatherPowerup(true);
         Gdx.app.log(TAG, "Feather collected!!");

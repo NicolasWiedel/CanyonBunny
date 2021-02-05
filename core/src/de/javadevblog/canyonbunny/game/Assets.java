@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -25,6 +27,8 @@ public class Assets implements Disposable, AssetErrorListener {
     public AssetFeather feather;
     public AssetLevelDecoration levelDecoration;
     public AssetFonts fonts;
+    public AssetSounds sounds;
+    public AssetMusic music;
 
     // Singleton Konstruktor
     private Assets(){}
@@ -36,6 +40,14 @@ public class Assets implements Disposable, AssetErrorListener {
         assetManager.setErrorListener(this);
         // lade Texture Atlas
         assetManager.load(Constants.TEXTURE_ATLAS_OBJECTS, TextureAtlas.class);
+        // lade Sounds
+        assetManager.load("sounds/jump.wav", Sound.class);
+        assetManager.load("sounds/jump_with_feather.wav", Sound.class);
+        assetManager.load("sounds/pickup_coin.wav", Sound.class);
+        assetManager.load("sounds/pickup_feather.wav", Sound.class);
+        assetManager.load("sounds/live_lost.wav", Sound.class);
+        // lade Musik
+        assetManager.load("music/keith303_-_brand_new_highscore.mp3", Music.class);
         // bis zum Ende des Ladevorgangs warten
         assetManager.finishLoading();
 
@@ -58,6 +70,8 @@ public class Assets implements Disposable, AssetErrorListener {
         goldCoin = new AssetGoldCoin(atlas);
         feather = new AssetFeather(atlas);
         levelDecoration = new AssetLevelDecoration(atlas);
+        sounds = new AssetSounds(assetManager);
+        music = new AssetMusic(assetManager);
     }
 
     @Override
@@ -158,6 +172,29 @@ public class Assets implements Disposable, AssetErrorListener {
             defaultBig.getRegion().getTexture().setFilter(
                     Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
+        }
+    }
+
+    public class AssetSounds{
+        public final Sound jump;
+        public final Sound jumpWithFeather;
+        public final Sound pickupCoin;
+        public final Sound pickupFeather;
+        public final Sound liveLost;
+        public AssetSounds (AssetManager am) {
+            jump = am.get("sounds/jump.wav", Sound.class);
+            jumpWithFeather = am.get("sounds/jump_with_feather.wav", Sound.class);
+            pickupCoin = am.get("sounds/pickup_coin.wav", Sound.class);
+            pickupFeather = am.get("sounds/pickup_feather.wav", Sound.class);
+            liveLost = am.get("sounds/live_lost.wav", Sound.class);
+        }
+    }
+
+    public class AssetMusic {
+        public final Music song01;
+
+        public AssetMusic (AssetManager am) {
+            song01 = am.get("music/keith303_-_brand_new_highscore.mp3", Music.class);
         }
     }
 }
