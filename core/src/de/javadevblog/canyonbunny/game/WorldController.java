@@ -47,7 +47,7 @@ public class WorldController extends InputAdapter implements Disposable {
         init();
     }
 
-    private void initiLevel(){
+    private void initLevel(){
         score = 0;
         scoreVisual = score;
         goalReached = false;
@@ -86,7 +86,7 @@ public class WorldController extends InputAdapter implements Disposable {
         lives = Constants.LIVES_START;
         livesVisual = lives;
         timeLeftGameOverDelay = 0;
-        initiLevel();
+        initLevel();
     }
 
     public void update(float deltaTime){
@@ -111,7 +111,7 @@ public class WorldController extends InputAdapter implements Disposable {
             if(isGameOver()){
                 timeLeftGameOverDelay = Constants.TIME_DELAY_GAME_OVER;
             } else {
-                initiLevel();
+                initLevel();
             }
         }
         level.mountains.updateScrollPosition(cameraHelper.getPosition());
