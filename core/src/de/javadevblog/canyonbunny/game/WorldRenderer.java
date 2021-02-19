@@ -176,6 +176,6 @@ public class WorldRenderer implements Disposable {
 
     @Override
     public void dispose() {
-        batch.dispose();
+//        batch.dispose();
     }
 }

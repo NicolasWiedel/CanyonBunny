@@ -61,7 +61,7 @@ public class WorldController extends InputAdapter implements Disposable {
             b2dWorld.dispose();
         }
 
-        b2dWorld = new World(new Vector2(0, 9.81f), true);
+        b2dWorld = new World(new Vector2(0, -9.81f), true);
         // Rocks
         Vector2 origin = new Vector2();
         for (Rock rock : level.rocks) {
@@ -277,7 +277,9 @@ public class WorldController extends InputAdapter implements Disposable {
             r2.set(level.goal.bounds);
             r2.x += level.goal.position.x;
             r2.y += level.goal.position.y;
-            if (r1.overlaps(r2)) onCollisionBunnyWithGoal();
+            if (r1.overlaps(r2)){
+                onCollisionBunnyWithGoal();
+            }
         }
     }
 
