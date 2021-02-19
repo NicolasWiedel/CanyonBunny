@@ -40,5 +40,12 @@ public class Constants {
     // GamePrefs Datei
     public static final String PREFERENCES = "canyonbunny.prefs";
 
+    // Anzahl der Karotten
+    public static final int CARROTS_SPAWN_MAX = 100;
 
+    // Radius in dem die Karotten spawnen
+    public static final float CARROTS_SPAWN_RADIUS = 3.5f;
+
+    // Abschlussverzögerung
+    public static final float TIME_DELAY_GAME_FINISHED = 6;
 }

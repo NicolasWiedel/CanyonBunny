@@ -15,6 +15,8 @@ public class Level {
     public BunnyHead bunnyHead;
     public Array<GoldCoin> goldCoins;
     public Array<Feather> feathers;
+    public Array<Carrot> carrots;
+    public Goal goal;
 
     // Deko
     public Clouds clouds;
@@ -32,6 +34,7 @@ public class Level {
         rocks = new Array<Rock>();
         goldCoins = new Array<GoldCoin>();
         feathers = new Array<Feather>();
+        carrots = new Array<Carrot>();
 
         // Laden der Level Datei
         Pixmap pixmap = new Pixmap(Gdx.files.internal(fileName));
@@ -83,6 +86,13 @@ public class Level {
                     obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
                     goldCoins.add((GoldCoin) obj);
                 }
+                // Ziel
+                else if (BLOCK_TYPE.GOAL.sameColor(currentPixel)){
+                    obj = new Goal();
+                    offsetHeight = -7.0f;
+                    obj.position.set(pixelX, baseHeight + offsetHeight);
+                    goal = (Goal)obj;
+                }
                 else {
                     int r = 0xff & (currentPixel >>> 24); //red color channel
                     int g = 0xff & (currentPixel >>> 16); //green color channel
@@ -112,6 +122,9 @@ public class Level {
         //Berge zeichnen
         mountains.render(batch);
 
+        // Ziel zeichnen
+        goal.render(batch);
+
         // Rocks zeichnen
         for (Rock rock : rocks) {
             rock.render(batch);
@@ -125,6 +138,11 @@ public class Level {
         // Federn zeichnen
         for (Feather feather : feathers){
             feather.render(batch);
+        }
+
+        // Karotten zeichnen
+        for (Carrot carrot : carrots){
+            carrot.render(batch);
         }
 
         // Spieler zeichnen
@@ -147,6 +165,9 @@ public class Level {
         for (Feather feather : feathers){
             feather.update(deltaTime);
         }
+        for(Carrot carrot : carrots){
+            carrot.update(deltaTime);
+        }
         clouds.update(deltaTime);
     }
 
@@ -155,7 +176,8 @@ public class Level {
         ROCK(0, 255, 0), // green
         PLAYER_SPAWNPOINT(255, 255, 255), // white
         ITEM_FEATHER(255, 0, 255), // purple
-        ITEM_GOLD_COIN(255, 255, 0); // yellow
+        ITEM_GOLD_COIN(255, 255, 0), // yellow
+        GOAL(255, 0, 0);
 
         private int color;
         private BLOCK_TYPE (int r, int g, int b) {
