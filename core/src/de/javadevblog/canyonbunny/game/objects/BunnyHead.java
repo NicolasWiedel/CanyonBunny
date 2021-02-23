@@ -1,9 +1,7 @@
 package de.javadevblog.canyonbunny.game.objects;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import de.javadevblog.canyonbunny.game.Assets;
 import de.javadevblog.canyonbunny.util.AudioManager;
@@ -18,6 +16,11 @@ public class BunnyHead extends AbstractGameObject {
     private final float JUMP_TIME_MAX = 0.3f;
     private final float JUMP_TIME_MIN = 0.1f;
     private final float JUMP_TIME_OFFSET_FLYING = JUMP_TIME_MAX - 0.18f;
+
+    private Animation<TextureAtlas.AtlasRegion> animNormal;
+    private Animation<TextureAtlas.AtlasRegion> animCopterTransform;
+    private Animation<TextureAtlas.AtlasRegion> animCopterTransformBack;
+    private Animation<TextureAtlas.AtlasRegion> animCopterRotate;
 
     public enum ViewDirection{
         LEFT,
@@ -47,6 +50,13 @@ public class BunnyHead extends AbstractGameObject {
 
     public void init(){
         dimension.set(1, 1);
+
+        animNormal = Assets.INSTANCE.bunny.animNormal;
+        animCopterTransform = Assets.INSTANCE.bunny.animCopterTransform;
+        animCopterTransformBack = Assets.INSTANCE.bunny.animCopterTransformBack;
+        animCopterRotate = Assets.INSTANCE.bunny.animCopterRotate;
+        setAnimation(animNormal);
+
         regHead = Assets.INSTANCE.bunny.head;
         // Bild auf Objekt zentrieren
         origin.set(dimension.x / 2, dimension.y / 2);
@@ -115,14 +125,40 @@ public class BunnyHead extends AbstractGameObject {
         }
 
         if(timeLeftFeatherPowerup > 0){
+            if (animation == animCopterTransformBack) {
+                // Restart "Transform" animation if another feather power-up
+                // was picked up during "TransformBack" animation. Otherwise,
+                // the "TransformBack" animation would be stuck while the
+                // power-up is still active.
+                setAnimation(animCopterTransform);
+            }
             timeLeftFeatherPowerup -= deltaTime;
             if(timeLeftFeatherPowerup < 0){
                 // Powerup beenden
                 timeLeftFeatherPowerup = 0;
                 setFeatherPowerup(false);
+                setAnimation(animCopterTransformBack);
             }
         }
         dustParticles.update(deltaTime);
+
+        // Change animation state according to feather power-up
+        if (hasFeatherPowerup) {
+            if (animation == animNormal) {
+                setAnimation(animCopterTransform);
+            } else if (animation == animCopterTransform) {
+                if (animation.isAnimationFinished(stateTime))
+                    setAnimation(animCopterRotate);
+            }
+        } else {
+            if (animation == animCopterRotate) {
+                if (animation.isAnimationFinished(stateTime))
+                    setAnimation(animCopterTransformBack);
+            } else if (animation == animCopterTransformBack) {
+                if (animation.isAnimationFinished(stateTime))
+                    setAnimation(animNormal);
+            }
+        }
     }
 
     @Override
@@ -170,8 +206,16 @@ public class BunnyHead extends AbstractGameObject {
         // Skin Farbe wählen
         batch.setColor(CharacterSkin.values()[GamePreferences.INSTANCE.charSkin] .getColor());
 
+        float dimCorrectionX = 0;
+        float dimCorrectionY = 0;
+        if (animation != animNormal) {
+            dimCorrectionX = 0.05f;
+            dimCorrectionY = 0.2f;
+        }
+
         // zeichnen
-        reg = regHead;
+//        reg = regHead;
+        reg = animation.getKeyFrame(stateTime, true);
         batch.draw(reg.getTexture(),
                 position.x, position.y, origin.x, origin.y,
                 dimension.x, dimension.y, scale.x, scale.y,

@@ -1,6 +1,9 @@
 package de.javadevblog.canyonbunny.game.objects;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -20,6 +23,9 @@ public abstract class AbstractGameObject {
     public Rectangle bounds;
     public Body body;
 
+    public float stateTime;
+    public Animation<TextureAtlas.AtlasRegion> animation;
+
     public AbstractGameObject() {position = new Vector2();
         dimension = new Vector2(1, 1);
         origin = new Vector2();
@@ -32,7 +38,13 @@ public abstract class AbstractGameObject {
         bounds = new Rectangle();
     }
 
+    public void setAnimation (Animation<TextureAtlas.AtlasRegion> animation) {
+        this.animation = animation;
+        stateTime = 0;
+    }
+
     public void update(float deltaTime){
+        stateTime += deltaTime;
         if(body == null){
             updateMotionX(deltaTime);
             updateMotionY(deltaTime);
