@@ -1,32 +1,72 @@
 package de.wiedel.cb;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ScreenUtils;
+import de.wiedel.cb.game.WorldController;
+import de.wiedel.cb.game.WorldRenderer;
+import de.wiedel.cb.utils.Constants;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class CanyonBunny extends ApplicationAdapter {
-    private SpriteBatch batch;
-    private Texture image;
+public class CanyonBunny implements ApplicationListener {
+
+    /** eindeutiger Bezeichner der Klasse */
+    public static final String TAG = CanyonBunny.class.getSimpleName();
+
+    /** Verweis auf den WorldController*/
+    private WorldController worldController;
+    /** Verweis auf den WorldRenderer */
+    private WorldRenderer worldRenderer;
+
+    /** Flag für das pausieren des Spiels */
+    private boolean paused;
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
+        // LibGDX Log Level auf debug setzen
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
+        // Initialiesierung
+        worldController = new WorldController();
+        worldRenderer = new WorldRenderer(worldController);
+
+        // Das Spiel ist aktiv.
+        paused = false;
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        worldRenderer.reseize(width, height);
     }
 
     @Override
     public void render() {
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        batch.begin();
-        batch.draw(image, 140, 210);
-        batch.end();
+
+        // Die Spilewelt nur updaten, wenn das Spiel aktiv
+        if (!paused) {
+            // Update der Spielelogik auf Basis der vergangenen Zeit seit dem letzte Frame
+            worldController.update(Gdx.graphics.getDeltaTime());
+
+            // leert den Screen und zeichnet den Hintergrund mit der Farbe Cornflowerblue neu
+            ScreenUtils.clear(Constants.CORNFLOWER_BLUE);
+
+            // Zeichnet die aktuelle Scene
+            worldRenderer.render();
+        }
+    }
+
+    @Override
+    public void pause() {
+        paused = true;
+    }
+
+    @Override
+    public void resume() {
+        paused = false;
     }
 
     @Override
     public void dispose() {
-        batch.dispose();
-        image.dispose();
+        worldRenderer.dispose();
     }
 }
