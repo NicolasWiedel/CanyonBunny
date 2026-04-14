@@ -1,11 +1,15 @@
 package de.wiedel.cb.game;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 
-public class WorldController {
+public class WorldController extends InputAdapter {
 
     /** eindeutiger Bezeichner der Klasse */
     public static final String TAG = WorldController.class.getSimpleName();
@@ -21,14 +25,31 @@ public class WorldController {
 
     /** Initialisierungsmethode */
     private void init(){
+        Gdx.input.setInputProcessor(this);
         initTestObjects();
     }
 
     /** Spielelogik */
     public void update(float delta){
+        handleDebugInput(delta);
         updateTestObjects(delta);
     }
 
+    /** InputAdapter Methoden */
+    @Override
+    public boolean keyUp(int keycode) {
+        // Spielewelt zurücksetzen
+        if (keycode == Input.Keys.R){
+            init();
+            Gdx.app.debug(TAG, "Game world zurückgesetzt!");
+        }
+        // nächstes Sprite auswählen
+        else if (keycode == Input.Keys.SPACE) {
+            selectedSprite = (selectedSprite + 1) % testSprites.length;
+            Gdx.app.debug(TAG, "Sprite #" + selectedSprite + " ausgewählt!");
+        }
+        return false;
+    }
 
     /** Code zu Testzwecken */
     private void initTestObjects(){
@@ -53,6 +74,8 @@ public class WorldController {
     private Pixmap createProceduralPixmap(int width, int height){
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGB888);
         pixmap.setColor(1, 0, 0, 0.5f);
+        pixmap.fill();
+        pixmap.setColor(1, 1, 0, 1f);
         pixmap.drawLine(0, 0, width, height);
         pixmap.drawLine(width, 0, 0, height);
         pixmap.setColor(0, 1, 1, 1);
@@ -64,5 +87,26 @@ public class WorldController {
         rotation += 90 * delta;
         rotation %= 360;
         testSprites[selectedSprite].setRotation(rotation);
+    }
+    private void handleDebugInput(float delta){
+        if (Gdx.app.getType() != Application.ApplicationType.Desktop){
+            return;
+        }
+        float spriteMoveSpped = 5 * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)){
+            moveSelectedSprite(-spriteMoveSpped, 0);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)){
+            moveSelectedSprite(spriteMoveSpped, 0);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)){
+            moveSelectedSprite(0, spriteMoveSpped);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)){
+            moveSelectedSprite(0, -spriteMoveSpped);
+        }
+    }
+    private void moveSelectedSprite(float x, float y){
+        testSprites[selectedSprite].translate(x, y);
     }
 }
