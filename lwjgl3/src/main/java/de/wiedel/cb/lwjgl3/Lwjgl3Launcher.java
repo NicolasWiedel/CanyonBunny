@@ -2,12 +2,28 @@ package de.wiedel.cb.lwjgl3;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import de.wiedel.cb.CanyonBunny;
 import de.wiedel.cb.utils.Constants;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
+
+    private static boolean rebuildAtlas = true;
+    public static boolean drawDebugOutline = true;
+
     public static void main(String[] args) {
+
+        if (rebuildAtlas) {
+            Settings settings = new Settings();
+            settings.maxWidth = 1024;
+            settings.maxHeight = 1024;
+            settings.duplicatePadding = false;
+            settings.debug = drawDebugOutline;
+            TexturePacker.process(settings, "assets/assets-raw/images",
+                "assets/images", "bunny");
+        }
         if (StartupHelper.startNewJvmIfRequired()) return; // This handles macOS support and helps on Windows.
         createApplication();
     }
