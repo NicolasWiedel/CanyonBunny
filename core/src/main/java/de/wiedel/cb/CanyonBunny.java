@@ -3,7 +3,9 @@ package de.wiedel.cb;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.ScreenUtils;
+import de.wiedel.cb.game.Assets;
 import de.wiedel.cb.game.WorldController;
 import de.wiedel.cb.game.WorldRenderer;
 import de.wiedel.cb.utils.Constants;
@@ -25,6 +27,9 @@ public class CanyonBunny implements ApplicationListener {
     public void create() {
         // LibGDX Log Level auf debug setzen
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
+        // Lade die Assets des Spiels
+        Assets.INSTANCE.init(new AssetManager());
 
         // Initialiesierung
         worldController = new WorldController();
@@ -62,11 +67,13 @@ public class CanyonBunny implements ApplicationListener {
 
     @Override
     public void resume() {
+        Assets.INSTANCE.init(new AssetManager());
         paused = false;
     }
 
     @Override
     public void dispose() {
         worldRenderer.dispose();
+        Assets.INSTANCE.dispose();
     }
 }
