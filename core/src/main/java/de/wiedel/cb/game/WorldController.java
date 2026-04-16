@@ -7,7 +7,9 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 import de.wiedel.cb.utils.CameraHelper;
 
 public class WorldController extends InputAdapter {
@@ -69,12 +71,13 @@ public class WorldController extends InputAdapter {
         // erstellt ein Array mit Testobjekten
         testSprites = new Sprite[5];
 
-        int width = 32;
-        int height = 32;
-        Pixmap pixmap = createProceduralPixmap(width, height);
-        Texture texture = new Texture(pixmap);
+        Array<TextureRegion> regions = new Array<>();
+        regions.add(Assets.INSTANCE.bunny.head);
+        regions.add(Assets.INSTANCE.feather.feather);
+        regions.add(Assets.INSTANCE.goldCoin.goldCoin);
+
         for (int i = 0; i < testSprites.length; i++){
-            Sprite sprite = new Sprite(texture);
+            Sprite sprite = new Sprite(regions.random());
             sprite.setSize(1, 1);
             sprite.setOrigin(sprite.getWidth() / 2f, sprite.getHeight() / 2f);
             float randomX = MathUtils.random(-2f, 2f);

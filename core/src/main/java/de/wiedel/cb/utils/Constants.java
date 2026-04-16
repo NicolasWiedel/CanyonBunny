@@ -15,5 +15,9 @@ public class Constants {
     public static final float VIEWPORT_WIDTH = 5.0f;
     public static final float VIEWPORT_HEIGHT = 5.0f;
 
+    /** TextureAtlas für die Assets des Siels */
     public static final String CANYONBUNNY_ATLAS = "images/bunny.atlas";
+
+    /** location for Levels des Spiles */
+    public static final String LEVEL_01 = "levels/level-01.png";
 }
