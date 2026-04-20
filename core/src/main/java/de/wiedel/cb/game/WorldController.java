@@ -156,9 +156,6 @@ public class WorldController extends InputAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.PERIOD)){
             cameraHelper.addZoom(-camZoomSpeed);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.COMMA)){
-            cameraHelper.addZoom(camZoomSpeed);
-        }
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)){
             cameraHelper.setZoom(1f);
         }
