@@ -5,8 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class AbstractGameObject {
 
-    protected Vector2 position;
-    protected Vector2 dimension;
+    public Vector2 position;
+    public Vector2 dimension;
     protected Vector2 origin;
     protected Vector2 scale;
     protected float rotation;
