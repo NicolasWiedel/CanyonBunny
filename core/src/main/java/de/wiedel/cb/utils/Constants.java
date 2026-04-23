@@ -15,9 +15,13 @@ public class Constants {
     public static final float VIEWPORT_WIDTH = 5.0f;
     public static final float VIEWPORT_HEIGHT = 5.0f;
 
+    /** GUI Größe */
+    public static final float VIEWPORT_GUI_WIDTH = 800.0f;
+    public static final float VIEWPORT_GUI_HEIGHT = 480.0F;
+
     /** TextureAtlas für die Assets des Siels */
     public static final String CANYONBUNNY_ATLAS = "images/bunny.atlas";
 
-    /** location for Levels des Spiles */
+    /** Ort für Levels des Spiles */
     public static final String LEVEL_01 = "levels/level-01.png";
 }
