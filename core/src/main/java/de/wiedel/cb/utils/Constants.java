@@ -24,4 +24,7 @@ public class Constants {
 
     /** Ort für Levels des Spiles */
     public static final String LEVEL_01 = "levels/level-01.png";
+
+    /** Anzahl an extra Leben */
+    public static final int LIVES_START = 3;
 }
