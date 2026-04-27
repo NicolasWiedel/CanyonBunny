@@ -11,7 +11,7 @@ import de.wiedel.cb.utils.Constants;
 public class Lwjgl3Launcher {
 
     private static boolean rebuildAtlas = true;
-    public static boolean drawDebugOutline = true;
+    public static boolean drawDebugOutline = false;
 
     public static void main(String[] args) {
 

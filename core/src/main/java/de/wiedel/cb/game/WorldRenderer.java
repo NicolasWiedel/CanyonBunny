@@ -34,7 +34,7 @@ public class WorldRenderer implements Disposable {
 
     /** Zeichenmethode */
     public void render(){
-        renderTestObjects();
+        renderWorld(batch);
     }
 
     /** was geschieht, wenn die Fenstergröße verändert wird */
@@ -43,20 +43,17 @@ public class WorldRenderer implements Disposable {
         camera.update();
     }
 
+    private void renderWorld(SpriteBatch batch){
+        worldController.cameraHelper.applyTo(camera);
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        worldController.level.render(batch);
+        batch.end();
+    }
+
     /** Freigabe von Ressourcen */
     @Override
     public void dispose() {
         batch.dispose();
-    }
-
-    /** Code zu Testzwecken */
-    private void renderTestObjects(){
-        worldController.cameraHelper.applyTo(camera);
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        for (Sprite sprite : worldController.testSprites){
-            sprite.draw(batch);
-        }
-        batch.end();
     }
 }

@@ -1,9 +1,9 @@
 package de.wiedel.cb.utils;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import de.wiedel.cb.game.objects.AbstractGameObject;
 
 /** Hilfsklasse für Kamerafunktionen */
 public class CameraHelper {
@@ -18,7 +18,7 @@ public class CameraHelper {
     private Vector2 position;
     private float zoom;
     /** Das Spielobjekt, dem die Kamera folgen soll */
-    private Sprite target;
+    private AbstractGameObject target;
 
     public CameraHelper() {
         position = new Vector2();
@@ -31,8 +31,8 @@ public class CameraHelper {
             return;
         }
 
-        position.x = target.getX() + target.getOriginX();
-        position.y = target.getY() + target.getOriginY();
+        position.x = target.position.x + target.origin.x;
+        position.y = target.position.y + target.origin.y;
     }
 
     /** getter und setter */
@@ -56,11 +56,11 @@ public class CameraHelper {
         return zoom;
     }
 
-    public void setTarget(Sprite target) {
+    public void setTarget(AbstractGameObject target) {
         this.target = target;
     }
 
-    public Sprite getTarget() {
+    public AbstractGameObject getTarget() {
         return target;
     }
 
@@ -68,7 +68,7 @@ public class CameraHelper {
         return target != null;
     }
 
-    public boolean hasTarget(Sprite target){
+    public boolean hasTarget(AbstractGameObject target){
         return hasTarget() && this.target.equals(target);
     }
 

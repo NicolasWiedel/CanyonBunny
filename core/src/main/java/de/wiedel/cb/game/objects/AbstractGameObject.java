@@ -7,9 +7,9 @@ public abstract class AbstractGameObject {
 
     public Vector2 position;
     public Vector2 dimension;
-    protected Vector2 origin;
-    protected Vector2 scale;
-    protected float rotation;
+    public Vector2 origin;
+    public Vector2 scale;
+    public float rotation;
 
     public AbstractGameObject(){
         position = new Vector2();

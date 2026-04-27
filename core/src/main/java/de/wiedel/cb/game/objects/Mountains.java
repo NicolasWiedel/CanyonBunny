@@ -40,6 +40,7 @@ public class Mountains extends AbstractGameObject {
         mountainLength += MathUtils.ceil(0.5f + offsetX);
         for (int i = 0; i < mountainLength; i++){
             // MountainLeft
+            reg =regMountainLeft;
             batch.draw(reg.getTexture(),
                 origin.x + xRel, position.y + origin.y + yRel,
                 origin.x, origin.y,

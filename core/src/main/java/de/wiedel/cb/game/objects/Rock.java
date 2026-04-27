@@ -54,7 +54,7 @@ public class Rock extends AbstractGameObject {
 
         // Mitte zeichnen
         reg = regMiddle;
-        relX -= 0;
+        relX = 0;
 
         for (int i = 0; i < length; i++){
             batch.draw(reg.getTexture(),
