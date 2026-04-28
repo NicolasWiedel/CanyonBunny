@@ -54,6 +54,7 @@ public class Assets implements Disposable, AssetErrorListener {
         }
 
         // Die Spieleressourcen instanziieren
+        fonts = new AssetFonts();
         bunny = new AssetBunny(atlas);
         rock = new AssetRock(atlas);
         goldCoin = new AssetGoldCoin(atlas);
@@ -64,6 +65,9 @@ public class Assets implements Disposable, AssetErrorListener {
     @Override
     public void dispose() {
         assetManager.dispose();
+        fonts.defaultSmall.dispose();
+        fonts.defaultNormal.dispose();
+        fonts.defaultBig.dispose();
     }
 
     public void error(String filename, Class type,Throwable throwable){
@@ -132,7 +136,12 @@ public class Assets implements Disposable, AssetErrorListener {
             defaultSmall = new BitmapFont(Gdx.files.internal("images/arial-15.fnt"),true);
             defaultNormal = new BitmapFont(Gdx.files.internal("images/arial-15.fnt"),true);
             defaultBig = new BitmapFont(Gdx.files.internal("images/arial-15.fnt"),true);
-
+            defaultSmall.getData().setScale(0.75f);
+            defaultNormal.getData().setScale(1.0f);
+            defaultBig.getData().setScale(2.0f);
+            defaultSmall.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            defaultNormal.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            defaultBig.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         }
     }
 }
