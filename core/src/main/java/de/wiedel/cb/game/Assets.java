@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
 import de.wiedel.cb.utils.Constants;
@@ -27,6 +28,7 @@ public class Assets implements Disposable, AssetErrorListener {
     public AssetGoldCoin goldCoin;
     public AssetFeather feather;
     public AssetLevelDecoration levelDecoration;
+    public AssetFonts fonts;
 
     private Assets(){}
 
@@ -119,6 +121,18 @@ public class Assets implements Disposable, AssetErrorListener {
             mountainLeft = atlas.findRegion("mountain_left");
             mountainRight = atlas.findRegion("mountain_right");
             waterOverlay = atlas.findRegion("water_overlay");
+        }
+    }
+    public class AssetFonts{
+        public final BitmapFont defaultSmall;
+        public final BitmapFont defaultNormal;
+        public final BitmapFont defaultBig;
+
+        public AssetFonts(){
+            defaultSmall = new BitmapFont(Gdx.files.internal("images/arial-15.fnt"),true);
+            defaultNormal = new BitmapFont(Gdx.files.internal("images/arial-15.fnt"),true);
+            defaultBig = new BitmapFont(Gdx.files.internal("images/arial-15.fnt"),true);
+
         }
     }
 }
