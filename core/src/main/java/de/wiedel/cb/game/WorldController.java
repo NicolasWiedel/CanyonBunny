@@ -48,6 +48,7 @@ public class WorldController extends InputAdapter {
     /** Spielelogik */
     public void update(float delta){
         handleDebugInput(delta);
+        level.update(delta);
         cameraHelper.update(delta);
     }
 

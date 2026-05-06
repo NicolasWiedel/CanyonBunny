@@ -33,6 +33,9 @@ public class Level {
 
     // Objekte
     public Array<Rock> rocks;
+    public BunnyHead bunnyHead;
+    public Array<GoldCoin> goldCoins;
+    public Array<Feather> feathers;
 
     // Deko
     public Clouds clouds;
@@ -44,8 +47,12 @@ public class Level {
     }
 
     private void init(String filename){
+        // Player
+        bunnyHead = null;
         // Objekte
         rocks = new Array<Rock>();
+        goldCoins = new Array<>();
+        feathers = new Array<>();
 
         // Bild mit den Level Daten laden
         Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
@@ -79,15 +86,24 @@ public class Level {
                 }
                 // player spawn point
                 else if (BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel)){
-
+                    obj = new BunnyHead();
+                    offsetHeight = -3.0f;
+                    obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
+                    bunnyHead = (BunnyHead) obj;
                 }
                 // Feder
                 else if (BLOCK_TYPE.ITEM_FEATHER.sameColor(currentPixel)){
-
+                    obj = new Feather();
+                    offsetHeight = -1.5f;
+                    obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
+                    feathers.add((Feather) obj);
                 }
                 // Goldmünze
                 else if (BLOCK_TYPE.ITEM_GOLD_COIN.sameColor(currentPixel)){
-
+                    obj = new GoldCoin();
+                    offsetHeight = -1.5f;
+                    obj.position.set(pixelX, baseHeight * obj.dimension.y + offsetHeight);
+                    goldCoins.add((GoldCoin) obj);
                 }
                 // unbekannte Pixel Farbe
                 else {
@@ -116,6 +132,20 @@ public class Level {
         Gdx.app.debug(TAG, "level: " + filename + " geladen!");
     }
 
+    public void update(float delta){
+        bunnyHead.update(delta);
+        for (Rock rock : rocks){
+            rock.update(delta);
+        }
+        for (GoldCoin goldCoin : goldCoins){
+            goldCoin.update(delta);
+        }
+        for (Feather feather : feathers){
+            feather.update(delta);
+        }
+        clouds.update(delta);
+    }
+
     public void render(SpriteBatch batch){
         // Berge zeichnen
         mountains.render(batch);
@@ -124,6 +154,19 @@ public class Level {
         for (Rock rock : rocks){
             rock.render(batch);
         }
+
+        // Coins zeichnen
+        for (GoldCoin goldCoin : goldCoins){
+            goldCoin.render(batch);
+        }
+
+        // Federn zeichnen
+        for (Feather feather : feathers){
+            feather.render(batch);
+        }
+
+        // Player zeichnen
+        bunnyHead.render(batch);
 
         // WaterOverlay zeichnen
         waterOverlay.render(batch);

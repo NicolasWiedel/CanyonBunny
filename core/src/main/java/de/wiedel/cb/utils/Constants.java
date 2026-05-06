@@ -27,4 +27,8 @@ public class Constants {
 
     /** Anzahl an extra Leben */
     public static final int LIVES_START = 3;
+
+    /** Dauer, die die Feder Wirkung zeigt. */
+    public static final float ITEM_FEATHER_POWERUP_DURATION = 9f;
 }
+
