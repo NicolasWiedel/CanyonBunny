@@ -4,14 +4,11 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Array;
-import com.sun.org.apache.bcel.internal.Const;
+import com.badlogic.gdx.math.Rectangle;
+import de.wiedel.cb.game.objects.Feather;
+import de.wiedel.cb.game.objects.GoldCoin;
+import de.wiedel.cb.game.objects.Rock;
 import de.wiedel.cb.utils.CameraHelper;
 import de.wiedel.cb.utils.Constants;
 
@@ -23,6 +20,10 @@ public class WorldController extends InputAdapter {
     public Level level;
     public int lives;
     public int score;
+
+    /** Vierecke für die Kollisionserkennung */
+    private Rectangle r1 = new Rectangle();
+    private Rectangle r2 = new Rectangle();
 
     /** Debug Kamera */
     public CameraHelper cameraHelper;
@@ -61,6 +62,52 @@ public class WorldController extends InputAdapter {
             Gdx.app.debug(TAG, "Game world zurückgesetzt!");
         }
         return false;
+    }
+
+    /** Kollisionsmethoden */
+    private void onCollisionBunnyHeadWithRoch(Rock rock){}
+    private void onCollisionBunnyHeadWithGoldCoin(GoldCoin goldCoin){}
+    private void onCollisionBunnyHeadWithFeather(Feather feather){}
+    private void testCollision(){
+        r1.set(level.bunnyHead.position.x,
+            level.bunnyHead.position.y,
+            level.bunnyHead.bounds.width,
+            level.bunnyHead.bounds.height);
+        //Kollision zwischen Bunny und Rock
+        for (Rock rock : level.rocks){
+            r2.set(rock.position.x, rock.position.y,
+                rock.bounds.width, rock.bounds.height);
+            if (!r1.overlaps(r2)){
+                continue;
+            }
+            onCollisionBunnyHeadWithRoch(rock);
+        }
+        //Kollision zwischen Bunny und GoldCoin
+        for (GoldCoin goldCoin : level.goldCoins){
+            if (goldCoin.collected){
+                continue;
+            }
+            r2.set(goldCoin.position.x, goldCoin.position.y,
+                goldCoin.bounds.width, goldCoin.bounds.height);
+            if (!r1.overlaps(r2)){
+                continue;
+            }
+            onCollisionBunnyHeadWithGoldCoin(goldCoin);
+            break;
+        }
+        //Kollision zwischen Bunny und Feather
+        for (Feather feather : level.feathers){
+            if (feather.collected){
+                continue;
+            }
+            r1.set(feather.position.x, feather.position.y,
+                feather.bounds.width, feather.bounds.height);
+            if (!r1.overlaps(r2)){
+                continue;
+            }
+            onCollisionBunnyHeadWithFeather(feather);
+            break;
+        }
     }
 
     private Pixmap createProceduralPixmap(int width, int height){
