@@ -6,11 +6,14 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Rectangle;
+import de.wiedel.cb.game.objects.BunnyHead;
+import de.wiedel.cb.game.objects.BunnyHead.JUMP_STATE;
 import de.wiedel.cb.game.objects.Feather;
 import de.wiedel.cb.game.objects.GoldCoin;
 import de.wiedel.cb.game.objects.Rock;
 import de.wiedel.cb.utils.CameraHelper;
 import de.wiedel.cb.utils.Constants;
+import jdk.javadoc.internal.doclets.formats.html.markup.Head;
 
 public class WorldController extends InputAdapter {
 
@@ -50,6 +53,7 @@ public class WorldController extends InputAdapter {
     public void update(float delta){
         handleDebugInput(delta);
         level.update(delta);
+        testCollision();
         cameraHelper.update(delta);
     }
 
@@ -65,9 +69,43 @@ public class WorldController extends InputAdapter {
     }
 
     /** Kollisionsmethoden */
-    private void onCollisionBunnyHeadWithRoch(Rock rock){}
-    private void onCollisionBunnyHeadWithGoldCoin(GoldCoin goldCoin){}
-    private void onCollisionBunnyHeadWithFeather(Feather feather){}
+    private void onCollisionBunnyHeadWithRoch(Rock rock){
+        BunnyHead bunnyHead = level.bunnyHead;
+        float heightDifference = Math.abs(bunnyHead.position.y - (rock.position.y +rock.bounds.height));
+        if(heightDifference > 0.25f){
+            boolean hitRightEdge = bunnyHead.position.x > (rock.position.x + rock.bounds.width / 2.0f);
+            if (hitRightEdge){
+                bunnyHead.position.x = rock.position.x + rock.bounds.width;
+            } else {
+                bunnyHead.position.x = rock.position.x - rock.bounds.width;
+            }
+            return;
+        }
+        switch (bunnyHead.jumpState) {
+            case GROUNDED:
+                break;
+            case FALLING:
+            case JUMP_FALLING:
+                bunnyHead.position.y = rock.position.y + bunnyHead.bounds.height + bunnyHead.origin.y;
+                bunnyHead.jumpState = JUMP_STATE.GROUNDED;
+                break;
+            case JUMP_RISING:
+                bunnyHead.position.y = rock.position.y + bunnyHead.bounds.height + bunnyHead.origin.y;
+                break;
+
+        }
+    }
+    private void onCollisionBunnyHeadWithGoldCoin(GoldCoin goldCoin){
+        goldCoin.collected = true;
+        score += goldCoin.getScore();
+        Gdx.app.log(TAG, "GoldCoin aufgesammelt!");
+    }
+    private void onCollisionBunnyHeadWithFeather(Feather feather){
+        feather.collected = true;
+        score += feather.getScore();
+        level.bunnyHead.setFeatherPowerUp(true);
+        Gdx.app.log(TAG, "Feder aufgesammelt!");
+    }
     private void testCollision(){
         r1.set(level.bunnyHead.position.x,
             level.bunnyHead.position.y,
